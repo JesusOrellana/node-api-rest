@@ -1,14 +1,11 @@
 const express = require('express')
 const cors = require('cors');
-const db = require("../database/config");
-const path = require("path");
-const hbs = require('hbs');
-var bodyParser = require('body-parser');
-
-/* const {dbConnection} = require('../database/config'); */
-
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const dbConnection = require('../database/config');
+const fileUpload = require('express-fileupload');
 const https = require('https');
-const http = require('http');
 const fs = require('fs');
 class Server {
 
@@ -27,12 +24,22 @@ class Server {
         
     }
 
+
     async connectDB() {
-        db.sequelize.sync();
+        await dbConnection();
     }
 
     middlewares() {
-        /* if (process.env.NODE_ENV_QA  == 'true') {
+
+        this.app.set('view engine', 'hbs');
+        this.app.use(cookieParser());
+        this.app.use(session({
+            secret: 'keyboard cat',
+            resave: true,
+            saveUninitialized: true
+        }));
+
+        /* if (process.env.NODE_ENV_PROD  == 'true') {
 
             var whitelist = ['https://axionate.io']
             var corsOptions = {
@@ -45,35 +52,31 @@ class Server {
                 }
             }
         } */
-
-        this.app.set('view engine', 'hbs');
+        
         this.app.use( cors(/* corsOptions */) );
         this.app.use( express.json() );
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(express.static(path.join(__dirname, "./public")));
+        this.app.use( bodyParser.urlencoded({ extended: true }) );
+        this.app.use( bodyParser.json() );
+        this.app.use(fileUpload());
+           
     }
 
     routes() {
 
-        if (process.env.NODE_ENV_QA  == 'true') {
+        if (process.env.NODE_ENV_PROD  == 'true') {
             this.app.use((req, res, next) => {
                 console.log(`https://${req.headers.host}${req.url}`);
                 if (req.secure) next(); else res.redirect(`https://${req.headers.host}${req.url}`);
             });
         }
         //Endpoints api
-        this.app.use(this.route.routes.api.v1.user , require('../routes/v1/users'));
-        this.app.use(this.route.routes.api.v1.auth , require('../routes/v1/auth'));
-
+        this.app.use('/' , require('../routes/main'));
+        /* this.app.use(this.route.routes.api.v1.auth, require('../routes/api/v1/auth')); */
     }
 
     listen() {
-        this.app.listen(this.port, () => {
-            console.log(`Servidor corriendo en ambiente ${process.env.NODE_ENV} en el puerto ${this.port}`);
-        })
 
-
-        if (process.env.NODE_ENV_QA  == 'true') {
+        if (process.env.NODE_ENV_PROD  == 'true') {
             const httpsServerOptions = {
                 key: fs.readFileSync(process.env.KEY_PATH),
                 cert: fs.readFileSync(process.env.CERT_PATH),
@@ -81,6 +84,12 @@ class Server {
             // Servidor HTTPS
             const serverHttps = https.createServer(httpsServerOptions, this.app);
             serverHttps.listen(process.env.HTTPS_PORT, process.env.IP);
+            console.log(`Servidor corriendo en ambiente ${process.env.NODE_ENV} en el puerto ${process.env.HTTPS_PORT}`);
+        }
+        else{
+            this.app.listen(this.port, () => {
+                console.log(`Servidor corriendo en ambiente ${process.env.NODE_ENV} en el puerto ${this.port}`);
+            })
         }
     }
 }
