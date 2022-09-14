@@ -5,15 +5,10 @@
                 "main":"/",
                 "auth":"/api/v1/auth/",
                 "user": "/api/v1/users/",
-                "role": "/api/v1/roles/"
+                "role": "/api/v1/roles/",
+                "access": "/api/v1/access/"
             }
-        },
-        "permits":[
-            
-            {"module": "Dashboard", "permits":[]},
-            {"module":"Roles", "permits":[]},
-            {"module":"Users", "permits":[]}
-        ]
+        }
         
     }
 }

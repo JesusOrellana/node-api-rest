@@ -50,6 +50,7 @@ class Server {
         this.app.use(this.route.routes.api.v1.user , require('../routes/v1/users'));
         this.app.use(this.route.routes.api.v1.auth , require('../routes/v1/auth'));
         this.app.use(this.route.routes.api.v1.role , require('../routes/v1/roles'));
+        this.app.use(this.route.routes.api.v1.access , require('../routes/v1/access'));
 
     }
 
