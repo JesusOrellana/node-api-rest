@@ -5,14 +5,13 @@ const path = require("path");
 const hbs = require('hbs');
 var bodyParser = require('body-parser');
 
-/* const {dbConnection} = require('../database/config'); */
-
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
 class Server {
 
     constructor( path ) {
+        
         /* this.init = init; */
         this.app = express();
         this.port = process.env.PORT;
@@ -32,22 +31,8 @@ class Server {
     }
 
     middlewares() {
-        /* if (process.env.NODE_ENV_QA  == 'true') {
-
-            var whitelist = ['https://axionate.io']
-            var corsOptions = {
-                origin: function (origin, callback) {
-                if (whitelist.indexOf(origin) !== -1) {
-                    callback(null, true)
-                } else {
-                    callback(console.log('sin autorización'))
-                }
-                }
-            }
-        } */
-
         this.app.set('view engine', 'hbs');
-        this.app.use( cors(/* corsOptions */) );
+        this.app.use( cors() );
         this.app.use( express.json() );
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(express.static(path.join(__dirname, "./public")));
@@ -64,24 +49,15 @@ class Server {
         //Endpoints api
         this.app.use(this.route.routes.api.v1.user , require('../routes/v1/users'));
         this.app.use(this.route.routes.api.v1.auth , require('../routes/v1/auth'));
+        this.app.use(this.route.routes.api.v1.role , require('../routes/v1/roles'));
 
     }
 
     listen() {
+
         this.app.listen(this.port, () => {
             console.log(`Servidor corriendo en ambiente ${process.env.NODE_ENV} en el puerto ${this.port}`);
         })
-
-
-        if (process.env.NODE_ENV_QA  == 'true') {
-            const httpsServerOptions = {
-                key: fs.readFileSync(process.env.KEY_PATH),
-                cert: fs.readFileSync(process.env.CERT_PATH),
-            };
-            // Servidor HTTPS
-            const serverHttps = https.createServer(httpsServerOptions, this.app);
-            serverHttps.listen(process.env.HTTPS_PORT, process.env.IP);
-        }
     }
 }
 

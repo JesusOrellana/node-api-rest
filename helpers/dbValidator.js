@@ -16,6 +16,14 @@ const roleValidator = async ( id = '' ) => {
     } 
 }
 
+const roleNameValidator = async ( name = '' ) => {
+    const role = await Role.findOne( { where: {name: name} });
+    console.log(role);
+    if (role) {
+        throw new Error(`El nombre del rol ya existe`);
+    } 
+}
+
 const emailValidator = async ( email = '' ) => {
     const emailValid = await User.findOne({ email });
     if( emailValid ){
@@ -131,6 +139,7 @@ const secretValidator = async ( secret = '' ) => {
 
 
 module.exports = { 
+    roleNameValidator,
     roleValidator,
     emailValidator, 
     emailEditValidator,
