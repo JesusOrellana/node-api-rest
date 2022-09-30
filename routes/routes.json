@@ -3,18 +3,11 @@
         "api":{
             "v1": {
                 "auth":"/api/v1/auth/",
-                "user": "/api/v1/users/",
-                "transaction": "/api/v1/transactions/",
-                "role": "/api/v1/roles/",
+                "users": "/api/v1/users/",
+                "roles": "/api/v1/roles/",
                 "files": "/api/v1/files/"
             }
-        },
-        "permits":[
-            
-            {"module": "Dashboard", "permits":[]},
-            {"module":"Roles", "permits":[]},
-            {"module":"Users", "permits":[]}
-        ]
+        }
         
     }
 }

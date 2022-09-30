@@ -69,9 +69,14 @@ class Server {
                 if (req.secure) next(); else res.redirect(`https://${req.headers.host}${req.url}`);
             });
         }
-        //Endpoints api
-        this.app.use('/' , require('../routes/main'));
-        /* this.app.use(this.route.routes.api.v1.auth, require('../routes/api/v1/auth')); */
+
+        //Configuracion de endpoints api
+        this.app.use('/' , require('../routes/v1/main'));
+        this.app.use(this.route.routes.api.v1.auth, require('../routes/v1/auth'));
+        this.app.use(this.route.routes.api.v1.roles, require('../routes/v1/roles'));
+        this.app.use(this.route.routes.api.v1.users, require('../routes/v1/users'));
+        /* this.app.use(this.route.routes.api.v1.files , require('../routes/api/v1/files'));
+        this.app.use(this.route.routes.api.v1.email , require('../routes/api/v1/emails')); */
     }
 
     listen() {
