@@ -75,8 +75,10 @@ class Server {
         this.app.use(this.route.routes.api.v1.auth, require('../routes/v1/auth'));
         this.app.use(this.route.routes.api.v1.roles, require('../routes/v1/roles'));
         this.app.use(this.route.routes.api.v1.users, require('../routes/v1/users'));
-        /* this.app.use(this.route.routes.api.v1.files , require('../routes/api/v1/files'));
-        this.app.use(this.route.routes.api.v1.email , require('../routes/api/v1/emails')); */
+        this.app.use(this.route.routes.api.v1.access , require('../routes//v1/access'));
+        this.app.use(this.route.routes.api.v1.role_access , require('../routes//v1/role_access'));
+        /* this.app.use(this.route.routes.api.v1.files , require('../routes/v1/files'));
+        this.app.use(this.route.routes.api.v1.email , require('../routes/v1/emails')); */
     }
 
     listen() {

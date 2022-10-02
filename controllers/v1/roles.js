@@ -58,13 +58,14 @@ class Role{
         try {
 
             const { name } = req.body;
+
             const rol = new RoleModel( { name } );
 
             await rol.save();
             res.status( 200 ).json( { status: 201,msg: 'Created' } );
 
         } catch (error) {
-            console.log(error);
+
             error_log(error,'Error interno del controlador role','roles.js postRole');
             res.status( 500 ).json( { 
                 status: 500, 
@@ -81,7 +82,7 @@ class Role{
             const { id } = req.params;
             const { name } = req.body;
 
-            const rol = await RoleModel.findByIdAndUpdate( id, name );
+            const rol = await RoleModel.findByIdAndUpdate( id, {name} );
 
             res.status(200).json({
                 status: 200,

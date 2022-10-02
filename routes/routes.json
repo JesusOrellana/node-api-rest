@@ -5,7 +5,10 @@
                 "auth":"/api/v1/auth/",
                 "users": "/api/v1/users/",
                 "roles": "/api/v1/roles/",
-                "files": "/api/v1/files/"
+                "access": "/api/v1/access/",
+                "role_access": "/api/v1/roleaccess/",
+                "files": "/api/v1/files/",
+                "emails": "/api/v1/emails/"
             }
         }
         
