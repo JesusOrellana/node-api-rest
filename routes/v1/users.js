@@ -4,8 +4,11 @@ const { check } = require('express-validator');
 const { roleValidator, emailValidator, idUserValidator,
 statusValidator, dniValidator, emailEditValidator} = require('../../helpers/dbValidator');
 const { validateFields } = require('../../middlewares/fields_middlewares');
+const { validateAccessByJWT } = require('../../middlewares/jwt_middlewares');
 const router = Router();
 const user = new User();
+
+router.use(validateAccessByJWT)
 
 router.get('/',( req , res ) =>{ user.getAllUser(req,res) });
 

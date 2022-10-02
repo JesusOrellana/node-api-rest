@@ -2,11 +2,11 @@ const { Router } = require('express');
 const Access = require('../../controllers/v1/access');
 const { check } = require('express-validator');
 const { validateFields } = require('../../middlewares/fields_middlewares');
-/* const { validateaccessByJWT } = require('../../middlewares/jwt_middlewares'); */
+const { validateAccessByJWT } = require('../../middlewares/jwt_middlewares');
 const router = Router();
 const access = new Access();
 
-/* router.use(validateaccessByJWT); */
+router.use(validateAccessByJWT);
 
 router.get('/',( req , res ) =>{ access.getAllAccess(req,res) });
 

@@ -2,11 +2,11 @@ const { Router } = require('express');
 const RoleAccess = require('../../controllers/v1/role_access');
 const { check } = require('express-validator');
 const { validateFields } = require('../../middlewares/fields_middlewares');
-/* const { validateAccessByJWT } = require('../../middlewares/jwt_middlewares'); */
+const { validateAccessByJWT } = require('../../middlewares/jwt_middlewares');
 const router = Router();
 const roleAccess = new RoleAccess();
 
-/* router.use(validateAccessByJWT); */
+router.use(validateAccessByJWT);
 
 router.get('/',( req , res ) =>{ roleAccess.getAllRoleAccess(req,res) });
 

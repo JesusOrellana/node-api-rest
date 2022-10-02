@@ -19,11 +19,11 @@ const validateAccessByJWT = async (  req = request, res, next ) => {
         }
 
         const { uid } = jwt.verify( token, process.env.PRIVATE_SIGNATURE );
-        console.log("🚀 ~ file: jwt_middlewares.js ~ line 21 ~ validateAccessByJWT ~ uid", uid)
+
 
         const user = await UserModel.findById( uid )
         .populate({path: 'role', select: 'name'})
-        console.log("🚀 ~ file: jwt_middlewares.js ~ line 25 ~ validateAccessByJWT ~ user", user)
+        
         if ( !user ) {
 
             error_log('Unauthorized','El usuario no existe','jwt_middlewares.js validateAccessByJWT');
@@ -43,7 +43,6 @@ const validateAccessByJWT = async (  req = request, res, next ) => {
                 const access = await AccessModel.findOne( { module: path } )
                 console.log(access);
                 const rolAccess = await RolAccessModel.findOne( { role: user.role._id, access: access._id } );
-                console.log("🚀 ~ file: jwt_middlewares.js ~ line 46 ~ validateAccessByJWT ~ rolAccess", rolAccess)
 
                 let flag = false;
 
